@@ -1,40 +1,55 @@
-let cart = [];
-
-exports.getCart = (req, res) => {
-  res.json(cart);
+const cart = [];
+// GET carrito
+const getCart = (req, res) => {
+  res.status(200).json(cart);
 };
 
-exports.addProduct = (req, res) => {
-
+// POST agregar producto
+const addToCart = (req, res) => {
   const { name, price, quantity } = req.body;
 
   if (!name || !price || !quantity) {
-    return res.status(400).json({ error: "Datos incompletos" });
+    return res.status(400).json({ error: "Datos inválidos" });
   }
 
-  const product = {
-    id: cart.length + 1,
-    name,
-    price,
-    quantity
-  };
-
+  const product = { name, price, quantity };
   cart.push(product);
 
   res.status(201).json(product);
 };
 
-exports.deleteProduct = (req, res) => {
+// DELETE producto
+const deleteFromCart = (req, res) => {
   const id = parseInt(req.params.id);
-  cart = cart.filter(p => p.id !== id);
-  res.json({ message: "Producto eliminado" });
+
+  if (id < 0 || id >= cart.length) {
+    return res.status(404).json({ error: "Producto no encontrado" });
+  }
+
+  cart.splice(id, 1);
+
+  res.status(200).json({ message: "Eliminado" });
 };
 
-exports.getTotal = (req, res) => {
-  const total = cart.reduce((acc, p) => acc + p.price * p.quantity, 0);
+// TOTAL
+const getTotal = (req, res) => {
+  const total = cart.reduce((sum, item) => {
+    return sum + item.price * item.quantity;
+  }, 0);
+
   res.json({ total });
 };
 
-exports.resetCart = () => {
-  cart = [];
+// RESET (para tests)
+const resetCart = () => {
+  cart.length = 0;
+};
+
+// 🚨 ESTO ES LO MÁS IMPORTANTE
+module.exports = {
+  getCart,
+  addToCart,
+  deleteFromCart,
+  getTotal,
+  resetCart
 };

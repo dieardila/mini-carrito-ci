@@ -3,9 +3,10 @@ const router = express.Router();
 
 const cart = require("../controllers/cartController");
 
+// 🔥 CORREGIDO
 router.get("/", cart.getCart);
-router.post("/", cart.addProduct);
-router.delete("/:id", cart.deleteProduct);
+router.post("/", cart.addToCart);
+router.delete("/:id", cart.deleteFromCart);
 router.get("/total", cart.getTotal);
 
 module.exports = router;

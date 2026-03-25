@@ -33,7 +33,7 @@ expect(res.statusCode).toBe(400);
 
 test("DELETE elimina producto", async () => {
 await request(app).post("/cart").send({name:"A", price:10, quantity:1});
-const res = await request(app).delete("/cart/1");
+const res = await request(app).delete("/cart/0");
 expect(res.statusCode).toBe(200);
 });
 
@@ -57,7 +57,7 @@ expect(res.body.length).toBe(2);
 
 test("Eliminar reduce carrito", async () => {
 await request(app).post("/cart").send({name:"A", price:10, quantity:1});
-await request(app).delete("/cart/1");
+await request(app).delete("/cart/0");
 const res = await request(app).get("/cart");
 expect(res.body.length).toBe(0);
 });
